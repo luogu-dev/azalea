@@ -3,7 +3,7 @@ AZALEA: A Zero Anti-human Local program Evaluator Application
 
 By Luogu
 
-AZALEA是洛谷的教室内比赛、作业、考试客户端解决方案，计划功能上是同类型软件Cena的超集，并且与洛谷的各项服务紧密结合。
+AZALEA是洛谷的教室内比赛、作业、考试客户端解决方案，计划功能上是同类型软件Cena的超集，但却又要极其易用且可靠，并且与洛谷的各项服务紧密结合。
 
 计划特性列表：
 * 内核使用C语言和.NET Core编写，GUI基于WPF
