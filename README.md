@@ -1,5 +1,5 @@
 # Project AZALEA
-AZALEA
+AZALEA: A Zero Anti-human Local program Evaluator Application
 
 By Luogu
 
