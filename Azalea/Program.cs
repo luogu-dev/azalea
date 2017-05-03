@@ -25,14 +25,20 @@ namespace Azalea
 
         static int HostCommand() 
         {
-            
+            var broadcast = Broadcast.Instance;
+            var dummyServer = new ServerDetail("Dummy", "001122AABBCC", "127.0.0.1", 2333);
+            broadcast.StartBroadcast(dummyServer);
+            while (true) { }
             return 0;
         }
 
 		static int ClientCommand()
 		{
-            var broadcast = new Broadcast();
-            while (true) {}
+            var broadcast = Broadcast.Instance;
+            var task = broadcast.GetServer();
+            task.Wait();
+            var server = task.Result;
+            Console.WriteLine(server.Name);
 			return 0;
 		}
 
@@ -42,7 +48,8 @@ namespace Azalea
 			return 0;
 		}
 
-        private static void SetupApp() {
+        private static void SetupApp() 
+        {
 			app.HelpOption("-? | --help");
 			var verbose = app.Option("-v | --verbose", "Verbose output", CommandOptionType.NoValue);
             var quiet = app.Option("-q | --quiet", "Silence output", CommandOptionType.NoValue);
@@ -74,7 +81,8 @@ namespace Azalea
 				config.OnExecute(() => JudgerCommand());
 			});
 
-            app.OnExecute(() => {
+            app.OnExecute(() => 
+            {
                 app.ShowHelp();
                 return 0;
             });
