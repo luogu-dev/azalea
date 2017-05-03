@@ -11,18 +11,34 @@ namespace Azalea.Networking
         private IPEndPoint SendEndpoint;
         private IPEndPoint ListenEndpoint;
 
+        public struct Message
+        {
+            public string Name;
+            public string Identifier;
+            public IPEndPoint EndPoint;
+            public string IPAddress 
+            {
+                get 
+                {
+
+                }
+                set 
+                {
+                }
+            }
+        }
+
         public Broadcast()
         {
             SendEndpoint = new IPEndPoint(IPAddress.Broadcast, Port);
             ListenEndpoint = new IPEndPoint(IPAddress.Any, Port);
         }
 
-        public void Send(String data)
+        public void Send(Message data)
         {
-
         }
 
-        public async Task<String> Receive()
+        public async Task<string> Receive()
         {
             var client = new UdpClient(ListenEndpoint);
             var asyncData = await client.ReceiveAsync();
