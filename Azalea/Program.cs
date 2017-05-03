@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.CommandLineUtils;
-using Azalea.Exceptions;
+using Azalea.Networking;
 
 namespace Azalea
 {
@@ -31,7 +31,9 @@ namespace Azalea
 
 		static int ClientCommand()
 		{
-
+            var broadcast = new Broadcast();
+            broadcast.StartReceive();
+            while (true) {}
 			return 0;
 		}
 

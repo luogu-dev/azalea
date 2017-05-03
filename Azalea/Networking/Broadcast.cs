@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Azalea.Networking
 {
@@ -15,9 +17,17 @@ namespace Azalea.Networking
             ListenEndpoint = new IPEndPoint(IPAddress.Any, Port);
         }
 
-        public void Send() {
-            
+        public void Send(String data)
+        {
+
         }
 
+        public async Task<String> Receive()
+        {
+            var client = new UdpClient(ListenEndpoint);
+            var asyncData = await client.ReceiveAsync();
+            var data = System.Text.Encoding.UTF8.GetString(asyncData.Buffer);
+            return data;
+        }
     }
 }
