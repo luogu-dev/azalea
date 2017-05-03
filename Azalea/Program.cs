@@ -32,7 +32,6 @@ namespace Azalea
 		static int ClientCommand()
 		{
             var broadcast = new Broadcast();
-            broadcast.StartReceive();
             while (true) {}
 			return 0;
 		}
