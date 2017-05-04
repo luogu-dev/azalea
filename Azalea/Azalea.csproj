@@ -10,6 +10,10 @@
   <ItemGroup>
     <Folder Include="Networking\" />
     <Folder Include="Roles\" />
+    <Folder Include="Roles\Host\" />
+    <Folder Include="Roles\Client\" />
+    <Folder Include="Roles\Judger\" />
+    <Folder Include="Judger\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />

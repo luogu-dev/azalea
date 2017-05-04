@@ -18,12 +18,7 @@ namespace Azalea.Networking
         private IPEndPoint ListenEndpoint;
 
         private static Broadcast instance = new Broadcast();
-        public static Broadcast Instance {
-            get 
-            {
-                return instance;
-            }
-        }
+        public static Broadcast Instance => instance;
 
         public Broadcast()
         {
