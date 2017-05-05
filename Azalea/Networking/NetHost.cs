@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace Azalea.Networking
 {
@@ -14,13 +15,20 @@ namespace Azalea.Networking
         private Task AcceptClientTask;
         private bool IsRunning;
 
-        public class Client {
+        public class HostClient {
             private string name;
             private string identifier;
             private IPAddress remoteIP;
             public IPAddress RemoteIP => remoteIP;
             private TcpClient connection;
             public TcpClient Connection => connection;
+
+            public async Task CommandClient(NetCommand<ClientCommandType> command)
+            {
+                var payload = command.Serialize();
+                var buffer = Encoding.UTF8.GetBytes(payload);
+                await connection.GetStream().WriteAsync(buffer, 0, buffer.Length);
+            }
         }
 
         public NetHost(ServerDetail detail)
@@ -47,11 +55,18 @@ namespace Azalea.Networking
         public async Task ServeClient(NetworkStream stream)
         {
             var ReadBuffer = new Byte[MaxBuffer];
-            await stream.ReadAsync(ReadBuffer, 0, MaxBuffer);
-            // Process name, etc
             while(IsRunning) 
             {
                 await stream.ReadAsync(ReadBuffer, 0, MaxBuffer);
+                var commandJson = Encoding.UTF8.GetString(ReadBuffer);
+                try
+                {
+                    var command = NetCommand<HostCommandType>.Unserialize(commandJson);
+                }
+                catch(Exception)
+                {
+                    // Invalid Command
+                }
             }
         }
     }
