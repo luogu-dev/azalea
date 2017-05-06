@@ -49,15 +49,15 @@ namespace Azalea.Networking
 		}
 
 		public IPEndPoint EndPoint;
-		public string IPAddress
+        public IPAddress IPAddress
 		{
 			get
 			{
-				return EndPoint.Address.ToString();
+				return EndPoint.Address;
 			}
 			private set
 			{
-				EndPoint.Address = System.Net.IPAddress.Parse(value);
+                EndPoint.Address = value;
 			}
 		}
 		public int Port
@@ -86,7 +86,7 @@ namespace Azalea.Networking
 
 		public string Serialize()
 		{
-			var stringArray = new List<String> { Name, Identifier, IPAddress, Port.ToString() };
+            var stringArray = new List<String> { Name, Identifier, IPAddress.ToString(), Port.ToString() };
 			return String.Join(";", stringArray);
 		}
 

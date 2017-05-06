@@ -8,17 +8,17 @@ namespace Azalea.Networking
 	public enum HostCommandType
 	{
 		Register,
-		Disconnect
+		Disconnect,
+        InvalidCommand
 	}
 
     public enum ClientCommandType
     {
-        
+        InvalidCommand
     }
 
     public class NetCommand<CommandType>
     {
-        const string CommandDetailIndex = "BuiltIn__CommandString";
 
         private CommandType Command;
         public string CommandString
@@ -30,12 +30,11 @@ namespace Azalea.Networking
             private set
             {
                 Command = (CommandType)Enum.Parse(typeof(CommandType), value);
-                parameters[CommandDetailIndex] = value;
             }
         }
 
-        private Dictionary<string, string> parameters;
-        public Dictionary<string, string> Parameters
+        private Object[] parameters;
+        public Object[] Parameters
         {
             get
             {
@@ -44,17 +43,16 @@ namespace Azalea.Networking
             private set
             {
                 parameters = value;
-                parameters[CommandDetailIndex] = Command.ToString();
             }
         }
 
-        public NetCommand(CommandType command, Dictionary<string, string> param) 
+        public NetCommand(CommandType command, Object[] param) 
         {
             parameters = param;
             Command = command;
         }
 
-		public NetCommand(string commandString, Dictionary<string, string> param)
+		public NetCommand(string commandString, Object[] param)
 		{
 			parameters = param;
 			CommandString = commandString;
@@ -67,11 +65,7 @@ namespace Azalea.Networking
 
         public static NetCommand<CommandType> Unserialize(string CommandJson)
         {
-            var CommandDetail = JsonConvert.DeserializeObject<Dictionary<string, string>>(CommandJson);
-            if (!CommandDetail.ContainsKey(CommandDetailIndex))
-                throw new ArgumentException(CommandDetailIndex + " not found in CommandJson");
-
-            return new NetCommand<CommandType>(CommandDetail[CommandDetailIndex], CommandDetail);
+            return JsonConvert.DeserializeObject<NetCommand<CommandType>>(CommandJson);
         }
     }
 }
