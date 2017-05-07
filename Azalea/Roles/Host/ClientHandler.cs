@@ -50,6 +50,23 @@ namespace Azalea.Roles.Host
             HostClient = hostClient;
         }
 
+        public async void Register(string _name, string _identifier)
+        {
+            Name = _name;
+            Identifier = _identifier;
+
+            await HostClient.CommandClient(new NetCommand<ClientCommandType>(ClientCommandType.GenericCommandSuccess, "Register"));
+        }
+
+        public void Disconnect()
+        {
+            HostClient.Terminate();
+        }
+
+        public void InvalidCommand()
+        {
+            
+        }
 
     }
 }

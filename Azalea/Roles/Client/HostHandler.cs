@@ -1,10 +1,15 @@
 ﻿using System;
-namespace Azalea.Roles
+using Azalea.Networking;
+
+namespace Azalea.Roles.Client
 {
-    public class Client
+    public class HostHandler
     {
-        public Client()
+        private ServerDetail Detail;
+
+        public HostHandler(ServerDetail detail)
         {
+            Detail = detail;
         }
     }
 }

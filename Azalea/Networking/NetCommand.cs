@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Azalea.Networking
@@ -9,11 +7,13 @@ namespace Azalea.Networking
 	{
 		Register,
 		Disconnect,
+        GenericCommandSuccess,
         InvalidCommand
 	}
 
     public enum ClientCommandType
     {
+        GenericCommandSuccess,
         InvalidCommand
     }
 
@@ -46,13 +46,13 @@ namespace Azalea.Networking
             }
         }
 
-        public NetCommand(CommandType command, Object[] param) 
-        {
-            parameters = param;
-            Command = command;
-        }
+		public NetCommand(CommandType command, params Object[] param)
+		{
+			parameters = param;
+			Command = command;
+		}
 
-		public NetCommand(string commandString, Object[] param)
+		private NetCommand(string commandString, Object[] param)
 		{
 			parameters = param;
 			CommandString = commandString;

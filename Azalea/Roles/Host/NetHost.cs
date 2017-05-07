@@ -1,12 +1,12 @@
-﻿using System;
+﻿﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Text;
 using System.Reflection;
-using Azalea.Roles.Host;
+using Azalea.Networking;
 
-namespace Azalea.Networking
+namespace Azalea.Roles.Host
 {
     public class NetHost
     {
@@ -15,9 +15,13 @@ namespace Azalea.Networking
         private ServerDetail Detail;
         private TcpListener Listener;
         private Task AcceptClientTask;
+        public ClientPool Pool;
         private bool IsRunning;
 
-        public class HostClient {
+		private static NetHost instance;
+		public static NetHost Instance => instance;
+
+		public class HostClient {
             private TcpClient connection;
             public TcpClient Connection => connection;
             public IPEndPoint EndPoint
@@ -39,6 +43,12 @@ namespace Azalea.Networking
                 handler = new ClientHandler(this);
             }
 
+            public void Terminate()
+            {
+                IsRunning = false;
+                NetHost.Instance.Pool.RemoveClient(this);
+            }
+
             public async Task CommandClient(NetCommand<ClientCommandType> command)
             {
                 var payload = command.Serialize();
@@ -46,10 +56,10 @@ namespace Azalea.Networking
                 await connection.GetStream().WriteAsync(buffer, 0, buffer.Length);
             }
 
-            public Task InvokeCommand(NetCommand<HostCommandType> command)
+            private Task InvokeCommand(NetCommand<HostCommandType> command)
             {
                 var method = typeof(ClientHandler).GetMethod(command.CommandString);
-                return Task.Run(() => method.Invoke(handler, command.Parameters));
+                return Task.Run(() => method.Invoke(Handler, command.Parameters));
             }
 
 			public async Task ServeClient()
@@ -59,6 +69,7 @@ namespace Azalea.Networking
 				{
                     await Connection.GetStream().ReadAsync(ReadBuffer, 0, MaxBuffer);
 					var commandJson = Encoding.UTF8.GetString(ReadBuffer);
+
                     NetCommand<HostCommandType> command;
 					try
 					{
@@ -66,15 +77,18 @@ namespace Azalea.Networking
 					}
 					catch (ArgumentException)
 					{
-						// Invalid Command
+                        _ = CommandClient(new NetCommand<ClientCommandType>(ClientCommandType.InvalidCommand));
+                        continue;
 					}
-                    var invoke = InvokeCommand(command);
+
+                    _ = InvokeCommand(command);
 				}
 			}
         }
 
         public NetHost(ServerDetail detail)
         {
+            instance = this;
             Detail = detail;
 
             Listener = new TcpListener(Detail.EndPoint);
@@ -90,6 +104,7 @@ namespace Azalea.Networking
             {
                 var clientConn = await Listener.AcceptTcpClientAsync();
                 var client = new HostClient(clientConn);
+                Pool.AddClient(client);
                 var task = client.ServeClient();
             }
         }
