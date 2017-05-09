@@ -74,7 +74,7 @@ namespace Azalea.Roles.Client
             await CommandHost(new NetCommand<HostCommandType>(HostCommandType.Register, Name, Identifier));
             var hostComm = HostCommunication();
 
-            handler = new HostHandler();
+            handler = new HostHandler(HostDetail);
 
             IsRunning = true;
             return Connection;
