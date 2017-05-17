@@ -17,6 +17,12 @@ namespace Azalea.Networking
         InvalidCommand
     }
 
+    public enum JudgerCommandType
+    {
+		GenericCommandSuccess,
+		InvalidCommand
+    }
+
     public class NetCommand<CommandType>
     {
 

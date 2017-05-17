@@ -11,5 +11,15 @@ namespace Azalea.Roles.Client
         {
             Detail = detail;
         }
+
+		public void GenericCommandSuccess(string CommandName)
+		{
+
+		}
+
+		public void InvalidCommand()
+		{
+
+		}
     }
 }

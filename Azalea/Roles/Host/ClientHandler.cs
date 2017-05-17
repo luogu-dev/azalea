@@ -63,6 +63,11 @@ namespace Azalea.Roles.Host
             HostClient.Terminate();
         }
 
+        public void GenericCommandSuccess(string CommandName)
+        {
+            
+        }
+
         public void InvalidCommand()
         {
             
